@@ -7,10 +7,12 @@ namespace HelloWorld
     {
         static void Main(string[] args)
         {
+
+            String file = Importer.FileImport();//returns a string of the contents of the file
             String input;
             int option;
             int check = 1;
-            Boolean loop = true;
+
 
             //will continue to loop if check = 1
             while (check == 1)
@@ -18,11 +20,11 @@ namespace HelloWorld
                 option = OptionCheck();
                 if (option == 1)
                 {
-                    Option1();
+                    Option1(file);//search
                 }
                 else if (option == 2)
                 {
-                    Option2();
+                    Option2(file);//replace,currently doesn't edit file
                 }
 
 
@@ -32,6 +34,7 @@ namespace HelloWorld
                 check = NumberCheck(input);
 
             }//end of while
+
         }
 
         private static int OptionCheck()
@@ -82,7 +85,7 @@ namespace HelloWorld
             return value;
         }
 
-        private static void Option1()
+        private static void Option1(String text)
         {
             String input;
             String pattern = "tonight";
@@ -98,12 +101,12 @@ namespace HelloWorld
                 pattern = input;
             }
 
-            Console.WriteLine("Enter a phrase and I will check if it contains the phrase \"" + pattern + "\" ");
-            input = Console.ReadLine();
-            MatchCollection matches = Regex.Matches(input, pattern, RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+            Console.WriteLine("I will check if it contains the phrase \"" + pattern + "\" ");
+
+            MatchCollection matches = Regex.Matches(text, pattern, RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
             if (matches.Count == 0)
             {
-                Console.WriteLine("The entered phrase doesn't contain \"" + pattern + "\"");
+                Console.WriteLine("The file doesn't contain \"" + pattern + "\"");
             }
             else
             {
@@ -111,23 +114,24 @@ namespace HelloWorld
             }
         }//end of option1
 
-        private static void Option2()
+        private static void Option2(String text)
         {
             String input = "placeholder";
             String pattern = "placeholder";
-            String phrase;
 
+            Console.WriteLine(text);
             Console.WriteLine("Enter the word you would like to replace");
             input = Console.ReadLine();
             pattern = input;
 
+
             Console.WriteLine("Enter what you would want to replace \"" + pattern + "\" with");
             input = Console.ReadLine();
 
-            Console.WriteLine("Enter a phrase and I will check if it contains the phrase \"" + pattern + "\" and it will be replaced with \"" + input + "\"");
-            phrase = Console.ReadLine();
-            phrase = Regex.Replace(phrase, pattern, input, RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
-            Console.WriteLine(phrase);
+            Console.WriteLine("checking file if it contains the phrase \"" + pattern + "\" and it will be replaced with \"" + input + "\"");
+            text = Regex.Replace(text, pattern, input, RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+            Console.WriteLine(text);
+            Importer.FileUpdate(text);
 
         }
     }
